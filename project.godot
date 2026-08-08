@@ -1,0 +1,9 @@
+[gd_project]
+config_version=4
+run/main_scene="res://scenes/main/Main.tscn"
+application/name="AFRICA RUSH"
+application/config/name="AFRICA RUSH"
+application/config/description="Prototype of Africa Rush mobile racing game"
+display/window/size/width=1280
+display/window/size/height=720
+input/touch_emulate_mouse=false

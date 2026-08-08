@@ -1,0 +1,29 @@
+# Ignore Godot-specific and build files
+
+/.import/
+.import/
+export_presets.cfg
+export_presets/*
+*.godot
+.idea/
+.vscode/
+*.tmp
+*.bak
+*.swp
+
+# Mono/.NET
+.mono/
+
+# Android exports and build artifacts
+.build/
+*.apk
+*.aab
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Keystore and secrets
+keystore.jks
+*.keystore
+secrets/
