@@ -3,6 +3,7 @@ extends RigidBody3D
 # CarController - basic, typed, configurable vehicle controller
 # This is a gameplay controller separated from visuals so models can be swapped later.
 
+@export var is_player: bool = true
 @export var max_speed_kmh: float = 180.0
 @export var acceleration_force: float = 8000.0
 @export var brake_force: float = 12000.0
@@ -27,13 +28,19 @@ func _ready() -> void:
     mass = weight
     _nitro_remaining = nitro_capacity
     respawn_transform = global_transform
-    add_to_group("player_car")
-    # Auto-register with RaceManager autoload if present
-    var root = get_tree().get_root()
-    if root and root.has_node("RaceManager"):
-        var rm = root.get_node("RaceManager")
-        if rm and rm.has_method("register_car"):
-            rm.register_car(self)
+    # Ensure correct group membership based on is_player and scene-assigned groups
+    # If the scene already added the car to player_car, respect that unless is_player is false
+    if is_player:
+        if not is_in_group("player_car"):
+            add_to_group("player_car")
+        if is_in_group("ai_car"):
+            remove_from_group("ai_car")
+    else:
+        if not is_in_group("ai_car"):
+            add_to_group("ai_car")
+        if is_in_group("player_car"):
+            remove_from_group("player_car")
+    # Do NOT auto-register with RaceManager here. Spawners (player/AI managers) should call RaceManager.register_car(car) when appropriate.
 
 func set_input(accel: float, brake: float, steer: float, handbrake: bool, nitro: bool) -> void:
     _accel_input = clamp(accel, 0.0, 1.0)

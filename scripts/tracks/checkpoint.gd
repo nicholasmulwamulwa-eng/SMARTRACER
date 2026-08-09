@@ -1,18 +1,26 @@
 extends Area3D
 
-# Checkpoint: automatically determines its index from parent order if not explicitly set.
+# Checkpoint: automatically determines its index from parent order when possible.
 @export var index: int = -1
+
+var _checkpoint_list: Array = []
 
 func _ready() -> void:
     add_to_group("track_checkpoint")
     connect("body_entered", Callable(self, "_on_body_entered"))
-    # Auto-assign index from parent's children order when possible
-    if index < 0 and get_parent():
-        var siblings = get_parent().get_children()
-        for i in range(siblings.size()):
-            if siblings[i] == self:
+    # Build a deterministic list of checkpoint nodes (only Area3D nodes that use this script) in parent order
+    if get_parent():
+        var cp_script = get_script()
+        for child in get_parent().get_children():
+            if child is Area3D and child.get_script() == cp_script:
+                _checkpoint_list.append(child)
+        # assign index based on position in the filtered list
+        for i in range(_checkpoint_list.size()):
+            if _checkpoint_list[i] == self:
                 index = i
                 break
+    if index < 0:
+        index = 0
 
 func _on_body_entered(body: Node) -> void:
     if not (body is RigidBody3D):
