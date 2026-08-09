@@ -28,6 +28,12 @@ func _ready() -> void:
     _nitro_remaining = nitro_capacity
     respawn_transform = global_transform
     add_to_group("player_car")
+    # Auto-register with RaceManager autoload if present
+    var root = get_tree().get_root()
+    if root and root.has_node("RaceManager"):
+        var rm = root.get_node("RaceManager")
+        if rm and rm.has_method("register_car"):
+            rm.register_car(self)
 
 func set_input(accel: float, brake: float, steer: float, handbrake: bool, nitro: bool) -> void:
     _accel_input = clamp(accel, 0.0, 1.0)

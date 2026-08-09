@@ -18,6 +18,12 @@ func _ready() -> void:
         _car = get_node(car_node_path)
     if _car:
         _car.add_to_group("ai_car")
+        # Auto-register with RaceManager autoload if present
+        var root = get_tree().get_root()
+        if root and root.has_node("RaceManager"):
+            var rm = root.get_node("RaceManager")
+            if rm and rm.has_method("register_car"):
+                rm.register_car(_car)
 
 func _physics_process(delta: float) -> void:
     if not _car or not _waypoints:

@@ -6,6 +6,7 @@ extends Node
 class_name RaceManager
 
 signal race_countdown_started(seconds)
+signal race_countdown_tick(seconds_left)
 signal race_started()
 signal race_finished(results)
 signal car_finished_event(car, final_lap)
@@ -39,10 +40,22 @@ func start_countdown(seconds: int = 3) -> void:
         if _lap_manager.has_signal("car_finished"):
             _lap_manager.connect("car_finished", Callable(self, "_on_car_finished"))
         # register existing cars with lap manager
+        # Also auto-discover cars in groups
+        var player_nodes = get_tree().get_nodes_in_group("player_car")
+        var ai_nodes = get_tree().get_nodes_in_group("ai_car")
+        for c in player_nodes:
+            register_car(c)
+        for c in ai_nodes:
+            register_car(c)
         for c in cars:
             if _lap_manager.has_method("register_car"):
                 _lap_manager.register_car(c)
-    # Simplified immediate start for now (no coroutine countdown)
+    # Countdown loop
+    for i in range(seconds, 0, -1):
+        emit_signal("race_countdown_tick", i)
+        print("[RaceManager] Countdown: %d" % i)
+        await get_tree().create_timer(1.0).timeout
+    # Start race
     race_active = true
     emit_signal("race_started")
     print("[RaceManager] Race started")
@@ -78,7 +91,10 @@ func get_positions() -> Array:
     for c in cars:
         var prog = _lap_manager.get_progress_score(c)
         # higher lap -> ahead, higher last_index -> ahead, lower distance -> ahead
-        scored.append({"car": c, "lap": prog.lap, "index": prog.index, "dist": prog.dist})
+        var lap = prog.has("lap") and prog["lap"] or 0
+        var index = prog.has("index") and prog["index"] or -1
+        var dist = prog.has("dist") and prog["dist"] or 1e9
+        scored.append({"car": c, "lap": lap, "index": index, "dist": dist})
     scored.sort_inplace_custom(self, "_position_compare")
     var order = []
     for s in scored:
