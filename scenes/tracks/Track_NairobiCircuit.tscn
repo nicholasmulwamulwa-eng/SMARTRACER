@@ -1,0 +1,64 @@
+[gd_scene load_steps=5 format=3]
+
+[node name="Track_NairobiCircuit" type="Node3D"]
+
+[node name="Road" type="MeshInstance3D" parent="."]
+mesh = SubResource( 1 )
+scale = Vector3(10, 1, 100)
+translation = Vector3(0, 0, 0)
+
+[node name="Checkpoints" type="Node3D" parent="."]
+
+[node name="CP1" type="Area3D" parent="Checkpoints"]
+script = ExtResource( 1 )
+translation = Vector3(0, 0.5, -20)
+
+[node name="CP1/CollisionShape3D" type="CollisionShape3D" parent="Checkpoints/CP1"]
+shape = SubResource( 2 )
+
+[node name="CP2" type="Area3D" parent="Checkpoints"]
+script = ExtResource( 1 )
+translation = Vector3(3, 0.5, 10)
+
+[node name="CP2/CollisionShape3D" type="CollisionShape3D" parent="Checkpoints/CP2"]
+shape = SubResource( 2 )
+
+[node name="CP3" type="Area3D" parent="Checkpoints"]
+script = ExtResource( 1 )
+translation = Vector3(-3, 0.5, 40)
+
+[node name="CP3/CollisionShape3D" type="CollisionShape3D" parent="Checkpoints/CP3"]
+shape = SubResource( 2 )
+
+[node name="StartGrid" type="Marker3D" parent="."]
+translation = Vector3(0, 0.5, -40)
+
+[node name="RespawnPoints" type="Node3D" parent="."]
+
+[node name="Respawn1" type="Marker3D" parent="RespawnPoints"]
+translation = Vector3(0, 0.5, -38)
+
+[node name="Respawn2" type="Marker3D" parent="RespawnPoints"]
+translation = Vector3(0, 0.5, -36)
+
+[node name="Waypoints" type="Node3D" parent="."]
+
+[node name="WP1" type="Marker3D" parent="Waypoints"]
+translation = Vector3(0, 0.5, -30)
+
+[node name="WP2" type="Marker3D" parent="Waypoints"]
+translation = Vector3(3, 0.5, 0)
+
+[node name="WP3" type="Marker3D" parent="Waypoints"]
+translation = Vector3(-3, 0.5, 30)
+
+[node name="LapManager" type="Node" parent="."]
+script = ExtResource( 2 )
+
+[sub_resource id=1 type="BoxMesh"]
+size = Vector3(1.0, 0.1, 1.0)
+
+[sub_resource id=2 type="Resource" name="LapManagerPlaceholder"]
+
+[ext_resource path="res://scripts/tracks/checkpoint.gd" type="Script" id=1]
+[ext_resource path="res://scripts/race/lap_manager.gd" type="Script" id=2]

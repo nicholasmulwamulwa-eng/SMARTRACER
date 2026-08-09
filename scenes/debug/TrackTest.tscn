@@ -1,0 +1,18 @@
+[gd_scene load_steps=2 format=3]
+
+[node name="TrackTest" type="Node3D"]
+
+[node name="TrackInstance" type="Node3D" parent="."]
+
+[node name="PlayerSpawn" type="Marker3D" parent="."]
+translation = Vector3(0, 0.5, -38)
+
+[node name="AIHolder" type="Node3D" parent="."]
+
+[node name="DebugHUDInstance" type="CanvasLayer" parent="."]
+script = ExtResource( 3 )
+
+[ext_resource path="res://scenes/tracks/Track_NairobiCircuit.tscn" type="PackedScene" id=1]
+[ext_resource path="res://scenes/cars/PlayerCar.tscn" type="PackedScene" id=2]
+[ext_resource path="res://scripts/ui/debug_hud.gd" type="Script" id=3]
+
