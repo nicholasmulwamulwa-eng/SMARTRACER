@@ -1,0 +1,23 @@
+[gd_scene load_steps=3 format=3]
+
+[node name="PlayerCar" type="RigidBody3D"]
+script = ExtResource( 1 )
+mass = 1200.0
+gravity_scale = 1.0
+contact_monitor = true
+contacts_reported = 4
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource( 1 )
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource( 2 )
+translation = Vector3(0, 0.75, 0)
+
+[sub_resource id=1 type="BoxShape3D"]
+size = Vector3(1.2, 0.5, 2.5)
+
+[sub_resource id=2 type="BoxMesh"]
+size = Vector3(1.2, 0.5, 2.5)
+
+[ext_resource path="res://scripts/cars/car_controller.gd" type="Script" id=1]
